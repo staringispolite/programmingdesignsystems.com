@@ -110,25 +110,24 @@ function draw() {
     translate(gravityWell.x, gravityWell.y);
     rotate(frameCount / el.rotationSpeed);
 
-    // Draw circle
-    strokeWeight(el.strokeWeight);
-    stroke(el.h, el.s, el.b, el.a);
-    ellipse(gravityWell.x - el.x, gravityWell.y - el.y, el.sizeX, el.sizeY);
-    pop();
-
     // "Age" the circle.
     age = frameCount - el.born;
     distanceFade = Math.sqrt(age*2) / 20.0;
     el.sizeX = el.sizeX - distanceFade;
     el.sizeY = el.sizeY - distanceFade;
-    if (el.sizeX > 0) {
-      el.a = originalOpacity * (el.sizeX / canvasSizeX);
-    }
+    el.a = originalOpacity * (el.sizeX / canvasSizeX);
     var percentOfLife = el.a / 100;
     var distX = el.x - gravityWell.x;
     var distY = el.y - gravityWell.y;
     el.x = el.x - (distX * percentOfLife) / 1000;
     el.y = el.y - (distY * percentOfLife) / 1000;
+
+    // Draw circle
+    strokeWeight(el.strokeWeight);
+    var currentOpacity = fadeIn(frameCount - el.born, 30, el.a)
+    stroke(el.h, el.s, el.b, currentOpacity);
+    ellipse(gravityWell.x - el.x, gravityWell.y - el.y, el.sizeX, el.sizeY);
+    pop();
   });
 
   // If we have room for more circles, randomly create them.
@@ -146,4 +145,12 @@ function draw() {
     }
   } 
 
+}
+
+function fadeIn(age, fadeInFrames, targetOpacity) {
+  var currentOpacity = targetOpacity;
+  if (age < fadeInFrames) {
+    currentOpacity = age / fadeInFrames * targetOpacity;
+  }
+  return currentOpacity;
 }
