@@ -9,7 +9,13 @@
 var ellipses = [];
 
 function setup() {
-  createCanvas(1300, 750);
+  var canvasSizeX = 1300;
+  var canvasSizeY = 750;
+  if (document && document.documentElement) {
+    canvasSizeX = document.documentElement.clientWidth;
+    canvasSizeY = document.documentElement.clientHeight;
+  }
+  createCanvas(canvasSizeX, canvasSizeY);
   background(255, 255, 255);
 
   // Basic variables.
